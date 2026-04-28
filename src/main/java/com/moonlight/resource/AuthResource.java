@@ -15,7 +15,9 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 public class AuthResource {
 
-    private final AuthService authService = new AuthService(new UserRepository(), new JwtUtil());
+    private static final UserRepository userRepository = new UserRepository();
+    private static final JwtUtil jwtUtil = new JwtUtil();
+    private static final AuthService authService = new AuthService(userRepository, jwtUtil);
 
     @POST
     @Path("/login")
@@ -74,7 +76,6 @@ public class AuthResource {
     @Path("/me")
     public Response getProfile(@HeaderParam("Authorization") String authHeader) {
         try {
-            JwtUtil jwtUtil = new JwtUtil();
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 return Response.status(401)
                         .entity(Map.of("message", "Token requerido"))
