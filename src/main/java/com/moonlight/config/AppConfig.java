@@ -19,6 +19,7 @@ public class AppConfig extends Application {
         classes.add(ProductResource.class);
         classes.add(OrderResource.class);
         classes.add(CorsFilter.class);
+        classes.add(CorsPreflightFilter.class);
         return classes;
     }
 }
