@@ -1,7 +1,5 @@
 package com.moonlight.model;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Order {
@@ -14,15 +12,13 @@ public class Order {
 
     public Order() {}
 
-    public Order(Long id, Long userId, List<OrderItem> items, String status, double total, LocalDateTime createdAt) {
+    public Order(Long id, Long userId, List<OrderItem> items, String status, double total, String createdAt) {
         this.id = id;
         this.userId = userId;
         this.items = items;
         this.status = status;
         this.total = total;
-        this.createdAt = createdAt != null
-                ? createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-                : null;
+        this.createdAt = createdAt;
     }
 
     public Long getId() { return id; }
