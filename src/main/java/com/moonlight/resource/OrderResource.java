@@ -17,7 +17,8 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 public class OrderResource {
 
-    private final OrderService orderService = new OrderService(new OrderRepository());
+    private static final OrderRepository orderRepository = new OrderRepository();
+    private final OrderService orderService = new OrderService(orderRepository);
     private final JwtUtil jwtUtil = new JwtUtil();
 
     private Long getUserIdFromToken(String authHeader) {
