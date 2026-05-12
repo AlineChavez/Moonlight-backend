@@ -15,7 +15,12 @@ public class CorsPreflightFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         if ("OPTIONS".equalsIgnoreCase(requestContext.getMethod())) {
-            requestContext.abortWith(Response.ok().build());
+            requestContext.abortWith(Response.ok()
+                    .header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Headers", "Authorization, Content-Type")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+                    .header("Access-Control-Max-Age", "86400")
+                    .build());
         }
     }
 }
