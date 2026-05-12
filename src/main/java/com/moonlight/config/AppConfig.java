@@ -5,6 +5,7 @@ import com.moonlight.resource.OrderResource;
 import com.moonlight.resource.ProductResource;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +21,7 @@ public class AppConfig extends Application {
         classes.add(OrderResource.class);
         classes.add(CorsFilter.class);
         classes.add(CorsPreflightFilter.class);
+        classes.add(JacksonFeature.class);
         return classes;
     }
 }
