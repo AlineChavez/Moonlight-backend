@@ -2,7 +2,9 @@ package com.moonlight.resource;
 
 import com.moonlight.model.Order;
 import com.moonlight.model.OrderItem;
+import com.moonlight.model.Product;
 import com.moonlight.repository.OrderRepository;
+import com.moonlight.repository.ProductRepository;
 import com.moonlight.security.JwtUtil;
 import com.moonlight.service.OrderService;
 import jakarta.ws.rs.*;
@@ -18,6 +20,7 @@ import java.util.Map;
 public class OrderResource {
 
     private static final OrderRepository orderRepository = new OrderRepository();
+    private static final ProductRepository productRepository = new ProductRepository();
     private final OrderService orderService = new OrderService(orderRepository);
     private final JwtUtil jwtUtil = new JwtUtil();
 
@@ -46,12 +49,15 @@ public class OrderResource {
             }
 
             List<OrderItem> items = rawItems.stream().map(i -> {
+                Long productId = Long.parseLong(i.get("id").toString());
+                Product product = productRepository.findById(productId)
+                        .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + productId));
                 OrderItem item = new OrderItem();
-                item.setProductId(Long.parseLong(i.get("id").toString()));
-                item.setProductName(i.get("name").toString());
+                item.setProductId(productId);
+                item.setProductName(product.getName());
                 item.setSize(i.get("size").toString());
                 item.setQuantity(Integer.parseInt(i.get("quantity").toString()));
-                item.setPrice(Double.parseDouble(i.get("price").toString()));
+                item.setPrice(product.getPrice());
                 return item;
             }).toList();
 
@@ -84,8 +90,13 @@ public class OrderResource {
     public Response getById(@PathParam("id") Long id,
                             @HeaderParam("Authorization") String authHeader) {
         try {
-            getUserIdFromToken(authHeader);
+            Long userId = getUserIdFromToken(authHeader);
             Order order = orderService.getById(id);
+            if (!order.getUserId().equals(userId)) {
+                return Response.status(403)
+                        .entity(Map.of("message", "No tienes permiso para ver este pedido"))
+                        .build();
+            }
             return Response.ok(order).build();
         } catch (RuntimeException e) {
             return Response.status(404)
