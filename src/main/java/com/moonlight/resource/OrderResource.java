@@ -57,9 +57,9 @@ public class OrderResource {
             Order order = orderService.create(userId, items);
             return Response.status(201).entity(order).build();
 
-        } catch (RuntimeException e) {
-            return Response.status(400)
-                    .entity(Map.of("message", e.getMessage()))
+        } catch (Exception e) {
+            return Response.status(500)
+                    .entity(Map.of("message", e.getClass().getSimpleName() + ": " + e.getMessage()))
                     .build();
         }
     }
