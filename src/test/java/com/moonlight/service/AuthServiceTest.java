@@ -1,6 +1,6 @@
 package com.moonlight.service;
 
-import com.moonlight.repository.UserRepository;
+import com.moonlight.repository.FakeUserRepository;
 import com.moonlight.security.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ class AuthServiceTest {
 
     @BeforeEach
     void setUp() {
-        authService = new AuthService(new UserRepository(), new JwtUtil());
+        authService = new AuthService(new FakeUserRepository(), new JwtUtil());
     }
 
     @Test

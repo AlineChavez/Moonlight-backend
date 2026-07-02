@@ -1,12 +1,33 @@
 package com.moonlight.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "order_items")
 public class OrderItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // The FK column is owned by Order.items (unidirectional @OneToMany with @JoinColumn),
+    // this is a read-only view of it so callers can keep using getOrderId()/setOrderId()
+    // the way they always have.
+    @Column(name = "order_id", insertable = false, updatable = false)
     private Long orderId;
+
+    @Column(nullable = false)
     private Long productId;
+
+    @Column(nullable = false)
     private String productName;
+
     private String size;
+
+    @Column(nullable = false)
     private int quantity;
+
+    @Column(nullable = false)
     private double price;
 
     public OrderItem() {}

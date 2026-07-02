@@ -1,5 +1,6 @@
 package com.moonlight.service;
 
+import com.moonlight.exception.ApiException;
 import com.moonlight.model.User;
 import com.moonlight.repository.UserRepository;
 import com.moonlight.security.JwtUtil;
@@ -22,12 +23,12 @@ public class AuthService {
     public Map<String, Object> login(String email, String password) {
         Optional<User> optUser = userRepository.findByEmail(email);
         if (optUser.isEmpty()) {
-            throw new RuntimeException("Credenciales incorrectas");
+            throw ApiException.unauthorized("Credenciales incorrectas");
         }
 
         User user = optUser.get();
         if (!PasswordUtil.check(password, user.getPassword())) {
-            throw new RuntimeException("Credenciales incorrectas");
+            throw ApiException.unauthorized("Credenciales incorrectas");
         }
 
         String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
@@ -47,7 +48,7 @@ public class AuthService {
 
     public Map<String, Object> register(String name, String email, String password) {
         if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("El email ya está registrado");
+            throw ApiException.conflict("El email ya está registrado");
         }
 
         String hashedPassword = PasswordUtil.hash(password);
@@ -71,6 +72,6 @@ public class AuthService {
 
     public User getProfile(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> ApiException.notFound("Usuario no encontrado"));
     }
 }

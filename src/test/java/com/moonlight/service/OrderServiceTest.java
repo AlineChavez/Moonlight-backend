@@ -2,7 +2,7 @@ package com.moonlight.service;
 
 import com.moonlight.model.Order;
 import com.moonlight.model.OrderItem;
-import com.moonlight.repository.OrderRepository;
+import com.moonlight.repository.FakeOrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ class OrderServiceTest {
 
     @BeforeEach
     void setUp() {
-        orderService = new OrderService(new OrderRepository());
+        orderService = new OrderService(new FakeOrderRepository());
     }
 
     private List<OrderItem> mockItems() {

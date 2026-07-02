@@ -1,13 +1,32 @@
 package com.moonlight.model;
 
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "orders")
 public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private Long userId;
-    private List<OrderItem> items;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id")
+    private List<OrderItem> items = new ArrayList<>();
+
+    @Column(nullable = false)
     private String status;
+
+    @Column(nullable = false)
     private double total;
+
+    @Column(nullable = false)
     private String createdAt;
 
     public Order() {}

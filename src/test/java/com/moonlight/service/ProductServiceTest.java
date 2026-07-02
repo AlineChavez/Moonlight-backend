@@ -1,7 +1,7 @@
 package com.moonlight.service;
 
 import com.moonlight.model.Product;
-import com.moonlight.repository.ProductRepository;
+import com.moonlight.repository.FakeProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,7 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(new ProductRepository());
+        productService = new ProductService(new FakeProductRepository());
     }
 
     @Test
