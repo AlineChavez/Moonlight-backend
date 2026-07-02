@@ -4,7 +4,7 @@ import com.moonlight.model.Order;
 import com.moonlight.model.OrderItem;
 import com.moonlight.repository.OrderRepository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +25,7 @@ public class OrderService {
                 .mapToDouble(i -> i.getPrice() * i.getQuantity())
                 .sum();
 
-        Order order = new Order(null, userId, items, "PENDING", total, LocalDateTime.now());
+        Order order = new Order(null, userId, items, "PENDING", total, Instant.now().toString());
         Order saved = orderRepository.save(order);
 
         saved.getItems().forEach(item -> item.setOrderId(saved.getId()));

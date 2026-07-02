@@ -1,6 +1,5 @@
 package com.moonlight.model;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class Order {
@@ -9,11 +8,11 @@ public class Order {
     private List<OrderItem> items;
     private String status;
     private double total;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     public Order() {}
 
-    public Order(Long id, Long userId, List<OrderItem> items, String status, double total, LocalDateTime createdAt) {
+    public Order(Long id, Long userId, List<OrderItem> items, String status, double total, String createdAt) {
         this.id = id;
         this.userId = userId;
         this.items = items;
@@ -37,6 +36,6 @@ public class Order {
     public double getTotal() { return total; }
     public void setTotal(double total) { this.total = total; }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getCreatedAt() { return createdAt; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 }

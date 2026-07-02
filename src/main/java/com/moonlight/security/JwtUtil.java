@@ -10,8 +10,10 @@ import java.util.Date;
 
 public class JwtUtil {
 
-    private static final String SECRET = "moonlight-cafe-secret-key-arequipa-2024-very-long";
-    private static final long EXPIRATION = 86400000L; // 24 horas
+    private static final String SECRET = System.getenv("JWT_SECRET") != null
+            ? System.getenv("JWT_SECRET")
+            : "moonlight-cafe-secret-key-arequipa-2024-very-long";
+    private static final long EXPIRATION = 86400000L;
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
     public String generateToken(Long userId, String email, String role) {
