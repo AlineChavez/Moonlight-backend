@@ -81,8 +81,14 @@ public final class JpaUtil {
             // characters reliably in all JDKs, so normalize to a scheme URI can handle first.
             URI uri = new URI(databaseUrl.replaceFirst("^postgres(ql)?://", "scheme://"));
             String[] userInfo = uri.getUserInfo() != null ? uri.getUserInfo().split(":", 2) : new String[0];
+            int port = uri.getPort() != -1 ? uri.getPort() : 5432;
 
-            String jdbcUrl = "jdbc:postgresql://" + uri.getHost() + ":" + uri.getPort() + uri.getPath();
+            // Managed providers like Neon/Supabase require SSL and pass it as a query param
+            // (e.g. ?sslmode=require) - preserve it instead of dropping it on the floor.
+            String jdbcUrl = "jdbc:postgresql://" + uri.getHost() + ":" + port + uri.getPath();
+            if (uri.getQuery() != null && !uri.getQuery().isBlank()) {
+                jdbcUrl += "?" + uri.getQuery();
+            }
             overrides.put("jakarta.persistence.jdbc.url", jdbcUrl);
             if (userInfo.length > 0) overrides.put("jakarta.persistence.jdbc.user", userInfo[0]);
             if (userInfo.length > 1) overrides.put("jakarta.persistence.jdbc.password", userInfo[1]);
